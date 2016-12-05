@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>music</title>
+    <link rel="stylesheet" href="assets/css/normalize.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/app.css">
+</head>
+
+<body class="page">
+    <header class="header">
+        <a v-link="{ name: 'home' }"><i class="fa fa-home"></i></a>
+        <h1><i class="fa fa-music"></i> Music Player</h1>
+        <a v-link="{name:'list' }""><i class="fa fa-list"></i></a>
+    </header>
+
+    <!-- 首页开始 -->
+    <script id="home_tmpl" type="text/v-template" >
+      <img src="assets/img/home.png" alt="" width="100%">
+    </script>
+    <!-- 首页结束 -->
+
+    <!-- 列表页开始 -->
+    <script id="list_tmpl" type="text/v-template">
+      <div class="list">
+      <ol>
+        <li v-for="item in list">
+          <a v-link="{name: 'item' , params:{id: item.id }}">
+            <span class="num">{{completion($index,3)}}</span>
+            <div class="info">
+              <h3 class="title">{{item.name}}</h3>
+              <span class="artist">{{item.artist}}</span>
+            </div>
+            <span class="duration">04:50</span>
+            <div class="photo"><img v-bind:src="item.poster" alt="谭咏麟"></div>
+          </a>
+        </li>
+      </ol>
+    </div>
+    </script>
+  <!-- 列表页结束 -->
+
+  <!-- 歌曲详情页开始 -->
+  <script id="item_tmpl" type="text/v-template">
+    <div class="player">
+      <div class="disc">
+        <img :src="item.poster" :style="{transform:'rotate(' + (item.current/item.duration*360*40) + 'deg)'}" alt="李克勤">
+        <span class="duration">{{convert(item.duration - item.current)}}</span>
+      </div>
+      <h2 class="title">{{item.name}}</h2>
+      <h3 class="artist">{{item.artist}}</h3>
+      <div class="lyric">
+        <p class="previous">人如天上的明月是不可拥有</p>
+        <p class="current">情如曲过只遗留无可挽救再分别</p>
+        <p class="next">为何只是失望填密我的空虚</p>
+      </div>
+      <input id="testRange" type="range" min="0" max="{{item.duration}}" value="0" v-model="item.current" v-on:change="progress">
+      <div class="controls">
+        <button><i class="fa fa-retweet"></i></button>
+        <button class="active"><i class="fa fa-backward"></i></button>
+        <button class="active" v-on:click="play">
+        <i class="fa" v-bind:class="{ 'fa-play':!item.playing, 'fa-pause':item.playing }"></i></button>
+        <button class="active"><i class="fa fa-forward"></i></button>
+        <button class="active"><i class="fa fa-random"></i></button>
+      </div>
+    </div>
+  </script>
+  <!-- 歌曲详情页结束 -->
+    <section class="main">
+      <router-view></router-view>
+    </section>
+    <script src="libs/vue/vue.js"></script>
+    <script src="libs/vue-router/vue-router.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
